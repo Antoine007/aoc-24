@@ -8,6 +8,10 @@ Done very quickly and un-refactored! 🙂
 
 Comment out the step you need (1st example, 1st input, 2nd example, 2nd data)
 
+## New day
+
+`$ sh new_day.sh`
+
 ## Success?
 
 - Day 1 ✅
@@ -37,4 +41,4 @@ Comment out the step you need (1st example, 1st input, 2nd example, 2nd data)
 
 ## Next year?
 
-Kep day 0s and copy those files to start the next year.
+Make a fresh rpo with day_0s and supporting files.
