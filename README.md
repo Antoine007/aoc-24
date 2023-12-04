@@ -15,7 +15,7 @@ Comment out the step you need (1st example, 1st input, 2nd example, 2nd data)
 ## Success?
 
 - Day 1 ✅
-- Day 2
+- Day 2 ✅
 - Day 3
 - Day 4
 - Day 5
