@@ -39,7 +39,6 @@ def step2(example = false)
   input = input(example)
   input.each_with_index do |line, i|
     # break if i > 5
-    number_pattern = /\d+/
     matches = line.enum_for(:scan, /\*/).map do
       match = Regexp.last_match
       { row: i, column: match.begin(0) }
@@ -57,7 +56,6 @@ def step2(example = false)
         match = Regexp.last_match
         { value: match[0].to_i, row: i, column: match.begin(0) }
       end
-      add = true
       values = values.flatten
       p values
       sum += values.inject(:*) if values.length == 2
