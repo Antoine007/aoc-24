@@ -7,8 +7,8 @@ day = "0#{day}" if day < 10
 
 require_relative "day_#{day}"
 
-# step1('example')
+step1('example')
 # step1
 
 # step2('example')
-step2
+# step2

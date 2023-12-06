@@ -18,8 +18,8 @@ Comment out the step you need (1st example, 1st input, 2nd example, 2nd data)
 - Day 2 ✅
 - Day 3 ✅
 - Day 4 ✅
-- Day 5
-- Day 6
+- Day 5 🙅🏻‍♂️ weird error decoding input
+- Day 6 ✅
 - Day 7
 - Day 8
 - Day 9
@@ -41,4 +41,4 @@ Comment out the step you need (1st example, 1st input, 2nd example, 2nd data)
 
 ## Next year?
 
-Make a fresh rpo with day_0s and supporting files.
+Make a fresh repo with `day_0...` and supporting files.
