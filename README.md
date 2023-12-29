@@ -28,12 +28,12 @@ Comment out the step you need (1st example, 1st input, 2nd example, 2nd data)
 - Day 12 🥝 half
 - Day 13 🙅🏻‍♂️
 - Day 14 ✅
-- Day 15
-- Day 16
-- Day 17
-- Day 18
-- Day 19
-- Day 20
+- Day 15 ✅
+- Day 16 test ok, real fails
+- Day 17 🔴
+- Day 18 test ok, real fails
+- Day 19 test ok, real fails
+- Day 20 🙅🏻‍♀️
 - Day 21
 - Day 22
 - Day 23
