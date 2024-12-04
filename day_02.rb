@@ -1,63 +1,42 @@
 def step1(example = false)
-  sum = 0
-  possible  = {
-    red: 12,
-    green: 13,
-    blue: 14
-  }
+  count = 0
   input(example).each do |line|
-    splitted = line.strip.split(':')
-    draws = splitted[1].split(";")
-    id = splitted[0].split(' ')[1]
-    sum += id.to_i
-    puts "ID: #{id}, sum: #{sum}"
-    # counter = {
-    #   red: 0,
-    #   green: 0,
-    #   blue: 0
-    # }
-    draws.each do |draw|
-      begin
-        draw.strip.split(',').each do |colour|
-          p colour
-          x = colour.strip.split(' ')
-          if x[0].to_i > possible[x[1].to_sym]
-            sum -= id.to_i
-            raise "Breaking out of inner cycle."
-          end
-        end
-      rescue
-        break
-      end
-    end
+    report = line.split(" ").map(&:to_i)
+    count += report_safety(report)
   end
-  p sum
+  p count
+end
+
+def report_safety(report)
+  direction = nil
+  report.each_with_index do |x, i|
+    next if i == 0
+    return 0 if direction == 'up' && x < report[i - 1]
+    return 0 if direction == 'down' && x > report[i - 1]
+    return 0 if (x - report[i - 1]).abs > 3 || x - report[i - 1] == 0
+
+    direction = x > report[i - 1] ? 'up' : 'down'
+  end
+  return 1
 end
 
 def step2(example = false)
-  sum = 0
+  count = 0
   input(example).each do |line|
-    splitted = line.strip.split(':')
-    draws = splitted[1].split(";")
-    id = splitted[0].split(' ')[1]
-    puts "ID: #{id}, sum: #{sum}"
-    counter = {
-      red: 0,
-      green: 0,
-      blue: 0
-    }
-    draws.each do |draw|
-      draw.strip.split(',').each do |colour|
-        x = colour.strip.split(' ')
-        if x[0].to_i > counter[x[1].to_sym]
-          counter[x[1].to_sym] = x[0].to_i
-        end
-      end
+    report = line.split(" ").map(&:to_i)
+    reports = []
+    results = []
+    report.length.times do |i|
+      temp_report = report.dup 
+      temp_report.delete_at(i) 
+      reports << temp_report   
     end
-    p counter
-    sum += (counter[:red] * counter[:green] * counter[:blue])
+    reports.each do |x|
+      results << report_safety(x)
+    end
+    count += 1 if results.include?(1)
   end
-  p sum
+  p count
 end
 
 

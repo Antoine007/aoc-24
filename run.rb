@@ -1,6 +1,6 @@
 day = Time.new.day
 day = "0#{day}" if day < 10
-day = "02"
+# day = "03"
 
 # chomp removes blank lines
 @input_example = IO.readlines("data/day_#{day}_example.txt", chomp: false)
