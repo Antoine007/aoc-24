@@ -1,112 +1,113 @@
 def step1(example = false)
-  directions = input(example)[0].strip.chars
-  rows = make_rows(example)
-
-  steps = 0
-  current = 'AAA'
-
-  while current != 'ZZZ'
-    direction = directions[steps % directions.length]
-    steps += 1
-    current = rows[current][direction.to_sym]
-    # p current
+  grid = []
+  antennas = {}
+  input(example).each do |line|
+    grid << line.strip.chars
   end
-  p steps
-end
-
-def brute_step2(example = false)
-  directions = input(example)[0].strip.chars
-  rows = make_rows(example)
-
-  steps = 0
-  current = rows.select{|k,v| k[2] == 'A'}.keys
-
-  while current.select{|c| c[2] != 'Z'}.count > 0
-    p steps
-    direction = directions[steps % directions.length]
-    steps += 1
-    current = current.map do |c|
-      rows[c][direction.to_sym]
+  grid.each_with_index do |row, y|
+    row.each_with_index do |cell, x|
+      if cell != '.'
+        if antennas[cell].nil?
+          antennas[cell] = [[x, y]]
+        else
+          antennas[cell] << [x, y]
+        end
+      end
     end
   end
-  p steps
+  an = []
+  antennas.each do |antenna, positions|
+    combos = positions.combination(2).to_a
+    combos.each do |combo|
+      a, b = combo
+
+      x_diff = a[0] - b[0]
+      y_diff = a[1] - b[1]
+
+      # [[8, 1], [5, 2]]
+      # 8 + 3
+      # 1 - 1
+
+      # 5 - 3
+      # 2 + 1
+      # [[11,0], [2,3]]
+     
+      y = [a[0] + x_diff, a[1] + y_diff]
+      z = [b[0] - x_diff, b[1] - y_diff]
+      p [combo, y, z]
+      an << z
+      an << y
+    end
+  end
+  an = an.select { |a| a[0] >= 0 && a[1] >= 0 && a[0] < grid.length && a[1] < grid[0].length }.sort.uniq
+  p an
+  p an.count
 end
 
-def make_rows(example)
-  rows = {}
-  input(example)[2..-1].map{ |row|
-    place =  row.strip.split(" = ")
-    left = place[1].split(", ")[0].gsub("(", "")
-    right = place[1].split(", ")[1].gsub(")", "")
-    rows[place[0]] = {L: left, R: right}
-  }
-  rows
-end
+def step2(example = false)
+  grid = []
+  antennas = {}
+  input(example).each do |line|
+    grid << line.strip.chars
+  end
+  grid.each_with_index do |row, y|
+    row.each_with_index do |cell, x|
+      if cell != '.'
+        if antennas[cell].nil?
+          antennas[cell] = [[x, y]]
+        else
+          antennas[cell] << [x, y]
+        end
+      end
+    end
+  end
+  an = []
+  antennas.each do |antenna, positions|
+    combos = positions.combination(2).to_a
+    combos.each_with_index do |combo, i|
+      res = []
+      a, b = combo
+      # p "combo"
+      # p combo
 
+      x_diff = a[0] - b[0]
+      y_diff = a[1] - b[1]
+
+      # [[8, 1], [5, 2]]
+      # 8 + 3
+      # 1 - 1
+
+      # 5 - 3
+      # 2 + 1
+      # [[11,0], [2,3]]
+
+      f = [a[0], a[1]]
+      while f[0] >= 0 && f[0] < grid.length && f[1] >= 0 && f[1] < grid[0].length
+        # p "loop f #{f}"
+        res << f
+        f = [res.last[0] + x_diff, res.last[1] + y_diff]
+      end
+      g = [b[0], b[1]]
+      while g[0] >= 0 && g[0] < grid.length && g[1] >= 0 && g[1] < grid[0].length
+        # p "loop g #{g}"
+        res << g
+        g = [res.last[0] - x_diff, res.last[1] - y_diff]
+      end
+      # p "res"
+      # p res
+      res.each do |c|
+        an << c
+      end
+    end
+  end
+  # p an
+  # p "an"
+  an = an.select { |a| a[0] >= 0 && a[1] >= 0 && a[0] < grid.length && a[1] < grid[0].length }.uniq.sort
+  p an
+  p an.count
+end
 
 def input(example)
   example == 'example' ? @input_example : @input
 end
 
-def step2(example= false)
-  data = input(example)
-  solve_part_two(data)
-end
-
-
-
- def solve_part_two(data)
-    info = parse_data(data)
-    number_of_steps = 0
-    instruction_index = 0
-    origins = info[:steps].keys.select { |key| key[2] == 'A' }
-    steps_separated = []
-    origins.each do |origin|
-      steps_separated << number_of_steps_part_2(info, origin)
-    end
-    p steps_separated.reduce(1, :lcm)
-  end
-
-  def number_of_steps_part_2(info, origin)
-    destination = [nil, nil, nil]
-    number_of_steps = 0
-    instruction_index = 0
-    while destination[2] != "Z"
-      origin, destination, instruction_index = next_destination(info, origin, instruction_index)
-      number_of_steps += 1
-    end
-    number_of_steps
-  end
-
-  def next_destination(info, origin, instruction_index)
-    instruction = info[:instructions][instruction_index]
-
-    if instruction == 'L'
-      destination = info[:steps][origin][:left]
-    else
-      destination = info[:steps][origin][:right]
-    end
-    origin = destination
-    instruction_index = (instruction_index + 1) % info[:instructions].length
-    [origin, destination, instruction_index]
-  end
-
-  def parse_data(data)
-    info = {
-      instructions: [],
-      steps: {}
-    }
-    data.each_with_index do |line, i|
-      if i == 0
-        info[:instructions] = line.strip.split('')
-      elsif i == 1
-        next
-      else
-        origin, destination = line.strip.split(' = ')
-        destination.gsub!("(", "").gsub!(")", "").gsub!(" ", "")
-        left, right = destination.split(',')
-        info[:steps][origin] = {left: left,right: right}
-      end
-    end
-    info
-  end
