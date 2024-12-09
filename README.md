@@ -18,27 +18,26 @@ Comment out the step you need (1st example, 1st input, 2nd example, 2nd data)
 - Day 2 ✅
 - Day 3 ✅
 - Day 4 ✅
-- Day 5 🙅🏻‍♂️ weird error decoding input
+- Day 5 ✅
 - Day 6 ✅
 - Day 7 ✅
-- Day 8 50%
+- Day 8 ✅
 - Day 9 ✅
-- Day 10 🙅🏻‍♀️
-- Day 11 ✅
-- Day 12 🥝 half
-- Day 13 🙅🏻‍♂️
-- Day 14 ✅
-- Day 15 ✅
-- Day 16 test ok, real fails
-- Day 17 🔴
-- Day 18 test ok, real fails
-- Day 19 test ok, real fails
-- Day 20 🙅🏻‍♀️
-- Day 21
-- Day 22
-- Day 23
-- Day 24
-
+- Day 10 
+- Day 11 
+- Day 12
+- Day 13 
+- Day 14 
+- Day 15 
+- Day 16
+- Day 17 
+- Day 18
+- Day 19
+- Day 20 
+- Day 21  
+- Day 22 
+- Day 23  
+- Day 24 
 ## Next year?
 
 Make a fresh repo with `day_0...` and supporting files.

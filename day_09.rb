@@ -1,72 +1,101 @@
+ 
+def checksum(blocks)
+  checksum = 0
+  blocks.each_with_index do |block, index|
+    checksum += block * index unless block.nil?
+  end
+  checksum
+end
+  
+def move_part1(blocks)
+  left = 0
+  right = blocks.length - 1
+
+  while left < right
+    if !blocks[left].nil?
+      left += 1
+    elsif blocks[right].nil?
+      right -= 1
+    else
+      blocks[left] = blocks[right]
+      blocks[right] = nil
+    end
+  end
+
+  blocks
+end
+
+
+def move_part2(blocks, file_sizes, file_index)
+  start_search = Hash.new(0)
+  file_sizes.reverse_each do |file_id, size|
+    (start_search[size]...file_index[file_id]).each do |window_start|
+      next unless blocks[window_start...window_start + size].all?(&:nil?)
+
+      start_search[size] = window_start + size
+      (0...size).each do |offset|
+        blocks[window_start + offset] = file_id
+        blocks[file_index[file_id] + offset] = nil
+      end
+      break
+    end
+  end
+  blocks
+end
+
 def step1(example = false)
-  lines = []
-  input(example).each do |line|
-    lines << line.split(' ').map(&:to_i)
-  end
-  result = []
-  lines.each do |line|
-    row = find_result_per_line(line)
-    result << extrapolate(row)
-  end
-  p result
-  p result.collect{|l| l.first.last}.sum
-end
+  blocks = []
+  file_sizes = {}
+  file_index = {}
+  file_id = 0
+  current_index = 0
+  file = true
 
-def find_result_per_line(line)
-  matrix = [line]
-  matrix.each_with_index do |line, index|
-    if line.all? { |char| char == 0 }
-      next
-    else
-      new_line = []
-      line.each_with_index do |char, index|
-        break if index == line.size - 1
-        new_line <<  line[index+1] - line[index]
-      end
-      matrix << new_line
-    end
-  end
-end
+  input(example).join("").strip.split("").each_with_index do |char, i|
 
-def extrapolate(matrix, back = false)
-  result = []
+      size = char.to_i
+      blocks += file ? [file_id] * size : [nil] * size
+    
+      if file
+        file_sizes[file_id] = size
+        file_index[file_id] = current_index
+        file_id += 1
+      end
+    
+      current_index += size
+      file = !file
 
-  matrix.reverse.each_with_index do |line, index|
-    if back
-      if index == 0
-        line.unshift(0)
-      else
-        new_value =  line.first - matrix.reverse[index - 1].first
-        line.unshift(new_value)
-      end
-    else
-      if index == 0
-        line << 0
-      else
-        new_value = matrix.reverse[index - 1].last + line.last
-        line << new_value
-      end
-    end
-    result << line
-    break if index == matrix.size - 1
   end
-  result.reverse
+  p blocks.clone
+  p move_part1(blocks.clone)
+  p checksum(move_part1(blocks.clone))
 end
 
 def step2(example = false)
-  lines = []
-  input(example).each do |line|
-    lines << line.split(' ').map(&:to_i)
-  end
-  result = []
-  lines.each do |line|
-    row = find_result_per_line(line)
-    result << extrapolate(row, true)
-  end
-  # p result
-  p result.collect{|l| l.first.first}.sum
-end
+  blocks = []
+  file_sizes = {}
+  file_index = {}
+  file_id = 0
+  current_index = 0
+  file = true
 
+  input(example).join("").strip.split("").each_with_index do |char, i|
+    size = char.to_i
+    blocks += file ? [file_id] * size : [nil] * size
+  
+    if file
+      file_sizes[file_id] = size
+      file_index[file_id] = current_index
+      file_id += 1
+    end
+  
+    current_index += size
+    file = !file
+  end
+  p blocks.clone
+  p move_part2(blocks.clone, file_sizes, file_index)
+  p checksum(move_part2(blocks.clone, file_sizes, file_index))
+end
 
 def input(example)
   example == 'example' ? @input_example : @input
